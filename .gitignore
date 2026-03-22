@@ -4,3 +4,6 @@ build
 coverage
 .env
 /generated/prisma
+
+// OS folder
+.DS_Store
