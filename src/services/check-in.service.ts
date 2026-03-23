@@ -2,6 +2,8 @@ import type { CheckInRepository } from "@/repositories/check-in.repository.js";
 import { GymsRepository } from "@/repositories/gyms.repository.js";
 import { getDistanceBetweenCoordinates } from "@/utils/get-distance-between-coordinates.js";
 import type { CheckIn } from "@prisma/client";
+import { MaxDistanceError } from "./errors/max-distance-error.js";
+import { MaxNumberOfCheckInsError } from "./errors/max-number-of-check-ins-error.js";
 import { ResourceNotFoundError } from "./errors/resource-not-found-error.js";
 
 interface CheckInServiceRequest {
@@ -41,7 +43,7 @@ export class CheckInService {
     );
 
     if (distance > MAX_DISTANCE_IN_KILOMETERS) {
-      throw new Error();
+      throw new MaxDistanceError();
     }
 
     const checkInOnSameDay = await this.checkInRepository.findByUserIdOnDate(
@@ -50,7 +52,7 @@ export class CheckInService {
     );
 
     if (checkInOnSameDay) {
-      throw new Error();
+      throw new MaxNumberOfCheckInsError();
     }
 
     const checkIn = await this.checkInRepository.create({
