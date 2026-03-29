@@ -1,0 +1,16 @@
+services:
+  gympass-clone-pg:
+    image: bitnami/postgresql:latest # ou uma tag específica, ex: 16
+    container_name: gympass-clone-pg # facilita identificar o container
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRESQL_USERNAME=docker
+      - POSTGRESQL_PASSWORD=docker
+      - POSTGRESQL_DATABASE=gympassclone
+    volumes:
+      - pgdata:/bitnami/postgresql/data # persistência dos dados (muito importante!)
+    restart: unless-stopped # reinicia automaticamente se cair
+
+volumes:
+  pgdata: # volume nomeado (melhor que bind mount para dev)
